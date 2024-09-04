@@ -7,3 +7,5 @@ target_link_libraries(${executable}
         build_properties
         pjexx::circularbuffer
 )
+
+target_compile_features(${executable} PRIVATE cxx_std_20)

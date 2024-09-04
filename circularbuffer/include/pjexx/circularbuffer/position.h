@@ -11,6 +11,7 @@
 #ifndef INCLUDE_PJEXX_CIRCULARBUFFER_POSITION_H
 #define INCLUDE_PJEXX_CIRCULARBUFFER_POSITION_H
 
+#include <compare>
 #include <concepts>
 #include <cstddef>
 
@@ -22,17 +23,58 @@ class Position
     using self_type = Position<Capacity>;
 
   public:
+    using underlying_type = std::size_t;
     constexpr Position() : _value {0} {}
 
-    constexpr explicit Position(std::integral auto value) : _value {value} {}
+    constexpr explicit Position(std::integral auto value) : _value {static_cast<underlying_type>(value)} {}
 
-    constexpr operator std::size_t() const { return _value; }
+    constexpr operator underlying_type() const { return _value; }
+
+    constexpr self_type& operator++()
+    {
+        ++_value;
+
+        if (_value == Capacity)
+        {
+            _value = 0;
+        }
+
+        return *this;
+    }
 
     constexpr self_type operator++(int)
     {
         self_type tmp = *this;
-        ++_value;
+        operator++();
         return tmp;
+    }
+
+    constexpr self_type& operator--()
+    {
+        if (_value == 0)
+        {
+            _value = Capacity - 1;
+        }
+        else
+        {
+            --_value;
+        }
+
+        return *this;
+    }
+
+    constexpr self_type operator--(int)
+    {
+        self_type tmp = *this;
+        operator--();
+        return tmp;
+    }
+
+    friend constexpr bool operator==(const self_type& lhs, const self_type& rhs) { return lhs._value == rhs._value; }
+
+    friend constexpr std::strong_ordering operator<=>(const self_type& lhs, const self_type& rhs)
+    {
+        return lhs._value <=> rhs._value;
     }
 
   private:

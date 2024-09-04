@@ -1,4 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.22)
+set(CMAKE_CXX_STANDARD 20)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -22,6 +23,7 @@ target_compile_options(build_properties INTERFACE
 	 $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wextra>
 	 $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wconversion>
 	 $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wsign-conversion>
+	 $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wno-c++98-compat>
      
 	 $<$<CXX_COMPILER_ID:MSVC>:/W4>
 	 $<$<CXX_COMPILER_ID:MSVC>:/WX>
@@ -29,3 +31,7 @@ target_compile_options(build_properties INTERFACE
 
 add_subdirectory(circularbuffer)
 add_subdirectory(examples)
+
+include(CTest)
+enable_testing()
+add_subdirectory(test)
