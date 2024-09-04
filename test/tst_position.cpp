@@ -105,4 +105,57 @@ TEST_F(PositionTest, TestPostDecrementWithWrap)
     EXPECT_EQ(uut--, 0);
     EXPECT_EQ(uut--, 41);
 }
+
+TEST_F(PositionTest, TestAddValueWithoutWrap)
+{
+    Position<42> uut {7};
+    EXPECT_EQ(uut + 14, 21);
+}
+
+TEST_F(PositionTest, TestAddValueAssignmentWithoutWrap)
+{
+    Position<42> uut {7};
+    uut += 14;
+    EXPECT_EQ(uut, 21);
+}
+
+TEST_F(PositionTest, TestAddValueWithWrap)
+{
+    Position<42> uut {7};
+    EXPECT_EQ(uut + 35, 0);
+}
+
+TEST_F(PositionTest, TestAddValueAssignmentWithWrap)
+{
+    Position<42> uut {7};
+    uut += 35;
+    EXPECT_EQ(uut, 0);
+}
+
+
+TEST_F(PositionTest, TestSubtractValueWithoutWrap)
+{
+    Position<42> uut {7};
+    EXPECT_EQ(uut - 5, 2);
+}
+
+TEST_F(PositionTest, TestSubtractValueAssignmentWithoutWrap)
+{
+    Position<42> uut {7};
+    uut -= 5;
+    EXPECT_EQ(uut, 2);
+}
+
+TEST_F(PositionTest, TestSubtractValueWithWrap)
+{
+    Position<42> uut {7};
+    EXPECT_EQ(uut - 8, 41);
+}
+
+TEST_F(PositionTest, TestSubtractValueAssignmentWithWrap)
+{
+    Position<42> uut {7};
+    uut -= 8;
+    EXPECT_EQ(uut, 41);
+}
 }  // namespace pjexx::circularbuffer::detail::test

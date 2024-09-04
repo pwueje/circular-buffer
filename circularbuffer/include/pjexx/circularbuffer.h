@@ -16,8 +16,8 @@
 #include <memory>
 #include <utility>
 
-#include "concepts.h"
 #include "circularbuffer/position.h"
+#include "concepts.h"
 
 namespace pjexx::circularbuffer
 {
@@ -38,19 +38,42 @@ class CircularBuffer
 
     constexpr ~CircularBuffer() noexcept { allocator_trait::deallocate(_allocator, _data, Capacity); }
 
-    constexpr reference operator[](size_type pos) { return *(_data + pos); }
-    constexpr const_reference operator[](size_type pos) const { return *(_data + pos); }
+    constexpr reference operator[](size_type pos) { return *(_data + static_cast<size_type>(_currentStart + pos)); }
+    constexpr const_reference operator[](size_type pos) const
+    {
+        return *(_data + static_cast<size_type>(_currentStart + pos));
+    }
 
     template <class... Args>
     constexpr reference emplace(Args&&... args)
     {
-        allocator_trait::construct(_allocator, (_data + _currentEnd++), std::forward<Args>(args)...);
+        allocator_trait::construct(_allocator, (_data + static_cast<size_type>(_currentEnd++)),
+                                   std::forward<Args>(args)...);
+
+        if (_numberOfElements == Capacity)
+        {
+            ++_currentStart;
+        }
+        else
+        {
+            ++_numberOfElements;
+        }
+
         return *_data;
     }
+
+    constexpr size_type capacity() const { return Capacity; }
+    constexpr size_type max_size() const { return Capacity; }
+    constexpr size_type size() const { return _numberOfElements; }
+    constexpr bool empty() const { return _numberOfElements == 0; }
+
+    constexpr pointer data() { return _data; }
+    constexpr const_pointer data() const { return _data; }
 
   private:
     allocator_type _allocator;
     pointer _data;
+    size_type _numberOfElements = 0;
 
     detail::Position<Capacity> _currentStart;
     detail::Position<Capacity> _currentEnd;

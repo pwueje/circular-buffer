@@ -17,6 +17,7 @@ int main()
 
     buff.emplace(6);
     buff.emplace(11);
+    buff.emplace(42);
 
     std::cout << "buff[0]: " << buff[0] << std::endl;
     std::cout << "buff[1]: " << buff[1] << std::endl;

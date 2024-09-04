@@ -28,7 +28,7 @@ class Position
 
     constexpr explicit Position(std::integral auto value) : _value {static_cast<underlying_type>(value)} {}
 
-    constexpr operator underlying_type() const { return _value; }
+    constexpr explicit operator underlying_type() const { return _value; }
 
     constexpr self_type& operator++()
     {
@@ -71,10 +71,45 @@ class Position
     }
 
     friend constexpr bool operator==(const self_type& lhs, const self_type& rhs) { return lhs._value == rhs._value; }
+    friend constexpr bool operator==(const self_type& lhs, underlying_type rhs) { return lhs._value == rhs; }
 
     friend constexpr std::strong_ordering operator<=>(const self_type& lhs, const self_type& rhs)
     {
         return lhs._value <=> rhs._value;
+    }
+
+    constexpr self_type& operator+=(underlying_type rhs)
+    {
+        _value = (_value + rhs) % Capacity;
+
+        return *this;
+    }
+
+    friend constexpr self_type operator+(self_type lhs, underlying_type rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    
+    constexpr self_type& operator-=(underlying_type rhs)
+    {
+        if (_value < rhs)
+        {
+            _value = Capacity - (rhs - _value);
+        }
+        else
+        {
+            _value -= rhs;
+        }
+       
+        return *this;
+    }
+
+    friend constexpr self_type operator-(self_type lhs, underlying_type rhs)
+    {
+        lhs -= rhs;
+        return lhs;
     }
 
   private:
