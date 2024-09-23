@@ -10,6 +10,6 @@ target_include_directories(${component} INTERFACE
 
 target_compile_features(${component} INTERFACE cxx_std_20)
 
-AddClangTidy(${component})
+target_enable_clang_tidy(${component})
 
 add_subdirectory(include/pjexx)
