@@ -5,7 +5,7 @@ function(target_enable_clang_tidy target)
         message(WARNING "clang-tidy not found.")
     else()
         message(STATUS "Enabling clang-tidy for ${target}")
-        list(APPEND CLANG-TIDY_CHECKS
+        set(CLANG_TIDY_CHECKS
             "bugprone-*"
             "clang-analyzer-*"
             "concurrency-*"
@@ -16,10 +16,11 @@ function(target_enable_clang_tidy target)
             "-modernize-use-trailing-return-type"
         )
 
-        list(JOIN CLANG-TIDY_CHECKS ";" CLANG-TIDY_CHECK_STR)
+        string(JOIN "," CLANG_TIDY_CHECK_STR ${CLANG_TIDY_CHECKS})
+        set(CLANG_TIDY_COMMAND "${CLANG-TIDY_PATH}" "-checks=-*,--warnings-as-errors=*,${CLANG_TIDY_CHECK_STR}")
 
         set_target_properties(${target}
-            PROPERTIES CXX_CLANG_TIDY "${CLANG-TIDY_PATH};-checks=-*;--warnings-as-errors=*;${CLANG-TIDY-CHECK-STR}"
+            PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}"
         )
 
         mark_as_advanced(CLANG-CLANG-TIDY_CHECK_STR)
