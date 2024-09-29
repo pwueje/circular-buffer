@@ -44,20 +44,22 @@ class CircularBuffer
         return *(_data + static_cast<size_type>(_currentStart + pos));
     }
 
+    template <class Arg>
+    constexpr void push_back(Arg&& value)
+    {
+        pointer currentPtr = (_data + static_cast<size_type>(_currentEnd++));
+        allocator_trait::construct(_allocator, currentPtr, std::forward<Arg>(value));
+
+        incrementElementCount();
+    }
+
     template <class... Args>
     constexpr reference emplace(Args&&... args)
     {
         pointer currentPtr = (_data + static_cast<size_type>(_currentEnd++));
         allocator_trait::construct(_allocator, currentPtr, std::forward<Args>(args)...);
 
-        if (_numberOfElements == Capacity)
-        {
-            ++_currentStart;
-        }
-        else
-        {
-            ++_numberOfElements;
-        }
+        incrementElementCount();
 
         return *currentPtr;
     }
@@ -77,6 +79,18 @@ class CircularBuffer
 
     detail::Position<Capacity> _currentStart;
     detail::Position<Capacity> _currentEnd;
+
+    constexpr void incrementElementCount()
+    {
+        if (_numberOfElements == Capacity)
+        {
+            ++_currentStart;
+        }
+        else
+        {
+            ++_numberOfElements;
+        }
+    }
 };
 }  // namespace pjexx::circularbuffer
 #endif

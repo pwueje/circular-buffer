@@ -132,4 +132,35 @@ TEST_F(CircularBufferTest, TestDataAccessConst)
         EXPECT_EQ(uut[i], value + i);
     }
 }
+
+TEST_F(CircularBufferTest, TestPushBackCopy)
+{
+    constexpr std::string_view value = "41";
+    CircularBuffer<std::string, BUFFER_SIZE> uut;
+    uut.push_back(value);
+}
+
+TEST_F(CircularBufferTest, TestPushBackMove)
+{
+    constexpr std::string_view value = "41";
+    CircularBuffer<std::string, BUFFER_SIZE> uut;
+    uut.push_back(std::string {value});
+}
+
+TEST_F(CircularBufferTest, TestPushBackMoreOftenThanBufferSize)
+{
+
+    constexpr int value = 5;
+    CircularBuffer<int, BUFFER_SIZE> uut;
+
+    for (uint i = 0; i <= BUFFER_SIZE; i++)
+    {
+        uut.push_back(value + i);
+    }
+
+    EXPECT_EQ(uut.size(), BUFFER_SIZE);
+    EXPECT_EQ(uut.max_size(), BUFFER_SIZE);
+    EXPECT_EQ(uut.capacity(), BUFFER_SIZE);
+    EXPECT_FALSE(uut.empty());
+}
 }  // namespace pjexx::circularbuffer::test
