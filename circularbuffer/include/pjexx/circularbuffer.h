@@ -16,6 +16,7 @@
 #include <memory>
 #include <utility>
 
+#include "circularbuffer/iterators.h"
 #include "circularbuffer/position.h"
 #include "concepts.h"
 
@@ -33,10 +34,13 @@ class CircularBuffer
     using const_reference = const value_type&;
     using pointer         = typename allocator_trait::pointer;
     using const_pointer   = typename allocator_trait::const_pointer;
+    using iterator        = detail::CircularBufferIterator<T, Capacity>;
+    using const_iterator  = detail::CircularBufferIterator<T, Capacity, detail::Const>;
 
     constexpr CircularBuffer() : _data {allocator_trait::allocate(_allocator, Capacity)} {}
 
-    constexpr explicit CircularBuffer(std::initializer_list<value_type> values, const Allocator& allocator = Allocator())
+    constexpr explicit CircularBuffer(std::initializer_list<value_type> values,
+                                      const Allocator& allocator = Allocator())
         : _allocator(allocator), _data {allocator_trait::allocate(_allocator, Capacity)}
     {
         for (auto value : values)
@@ -80,6 +84,14 @@ class CircularBuffer
 
     constexpr pointer data() { return _data; }
     constexpr const_pointer data() const { return _data; }
+
+    constexpr iterator begin() { return iterator {_data, _currentStart, _numberOfElements}; };
+    constexpr const_iterator begin() const { return const_iterator {_data, _currentStart, _numberOfElements}; };
+    constexpr const_iterator cbegin() const { return const_iterator {_data, _currentStart, _numberOfElements}; };
+
+    constexpr iterator end() { return iterator {_data, _currentStart, _numberOfElements, _numberOfElements}; };
+    constexpr const_iterator end() const { return const_iterator {_data, _currentStart, _numberOfElements, _numberOfElements}; };
+    constexpr const_iterator cend() const { return const_iterator {_data, _currentStart, _numberOfElements, _numberOfElements}; };
 
   private:
     allocator_type _allocator;

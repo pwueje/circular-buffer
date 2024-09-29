@@ -24,6 +24,7 @@ include(GoogleTest)
 gtest_discover_tests(${component})
 
 target_sources(${component} PRIVATE
+    "tst_circularbuffer.cpp"
     "tst_position.cpp"
 )
 target_generate_coverage_report(${component})

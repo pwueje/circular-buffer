@@ -25,5 +25,12 @@ int main()
     std::cout << std::format("buff[0]: {}\n", buff[0]);
     std::cout << std::format("buff[1]: {}\n", buff[1]);
 
+    for (auto item : buff)
+    {
+        std::cout << std::format("{} ", item);
+    }
+
+    std::cout << "\n";
+
     return EXIT_SUCCESS;
 }

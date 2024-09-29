@@ -158,7 +158,6 @@ TEST_F(CircularBufferTest, TestPushBackMove)
 
 TEST_F(CircularBufferTest, TestPushBackMoreOftenThanBufferSize)
 {
-
     constexpr int value = 5;
     CircularBuffer<int, BUFFER_SIZE> uut;
 
@@ -171,5 +170,45 @@ TEST_F(CircularBufferTest, TestPushBackMoreOftenThanBufferSize)
     EXPECT_EQ(uut.max_size(), BUFFER_SIZE);
     EXPECT_EQ(uut.capacity(), BUFFER_SIZE);
     EXPECT_FALSE(uut.empty());
+}
+
+TEST_F(CircularBufferTest, TestIterate)
+{
+    CircularBuffer<int, BUFFER_SIZE> uut {0, 1, 2};
+
+    int expected = 0;
+    ASSERT_EQ(uut.size(), 3);
+    int iterated = 0;
+
+    for (auto value : uut)
+    {
+        ++iterated;
+        EXPECT_EQ(value, expected++);
+    }
+
+    EXPECT_EQ(iterated, 3);
+}
+
+TEST_F(CircularBufferTest, TestIterateConst)
+{
+    CircularBuffer<int, BUFFER_SIZE> uut {0, 1, 2};
+
+    ASSERT_EQ(uut.size(), 3);
+
+    auto validate = [](const auto &uut)
+    {
+        int expected = 0;
+        int iterated = 0;
+
+        for (auto value : uut)
+        {
+            ++iterated;
+            EXPECT_EQ(value, expected++);
+        }
+
+        EXPECT_EQ(iterated, 3);
+    };
+
+    validate(uut);
 }
 }  // namespace pjexx::circularbuffer::test
