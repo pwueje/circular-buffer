@@ -1,3 +1,6 @@
+# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
 function(target_enable_clang_tidy target)
     find_program(CLANG-TIDY_PATH clang-tidy)
 

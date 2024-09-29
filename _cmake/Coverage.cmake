@@ -1,3 +1,6 @@
+# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
 function(target_enable_coverage target)
     target_compile_options(${target} PRIVATE --coverage)
     target_link_options(${target} PRIVATE --coverage -lgcov)

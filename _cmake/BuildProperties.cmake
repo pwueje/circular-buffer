@@ -1,3 +1,6 @@
+# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
 function(target_add_common_build_properties target)
 	target_compile_options(${target} PRIVATE
 		 $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall>

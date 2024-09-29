@@ -1,4 +1,7 @@
-﻿cmake_minimum_required (VERSION 3.22)
+﻿# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
+cmake_minimum_required (VERSION 3.22)
 set(CMAKE_CXX_STANDARD 20)
 
 # Enable Hot Reload for MSVC compilers if supported.

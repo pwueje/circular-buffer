@@ -1,3 +1,6 @@
+# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
 set(component "circularbuffer")
 
 add_library(${component} INTERFACE)

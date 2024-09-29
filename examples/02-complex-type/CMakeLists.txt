@@ -1,3 +1,6 @@
+# Copyright 2024 Philipp Jeske
+# SPDX-License-Identifier: MIT
+
 set(executable "circularbuffer-example-02")
 
 add_executable(${executable} main.cpp)
