@@ -16,6 +16,7 @@ class PositionTest : public ::testing::Test
 {
 };
 
+// NOLINTBEGIN(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 TEST_F(PositionTest, TestConstruction) { Position<42> uut; }
 TEST_F(PositionTest, TestConstructionWithValue) { Position<42> uut {7}; }
 
@@ -158,4 +159,6 @@ TEST_F(PositionTest, TestSubtractValueAssignmentWithWrap)
     uut -= 8;
     EXPECT_EQ(uut, 41);
 }
+
+// NOLINTEND(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 }  // namespace pjexx::circularbuffer::detail::test
