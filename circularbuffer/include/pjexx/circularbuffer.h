@@ -47,8 +47,8 @@ class CircularBuffer
     template <class... Args>
     constexpr reference emplace(Args&&... args)
     {
-        allocator_trait::construct(_allocator, (_data + static_cast<size_type>(_currentEnd++)),
-                                   std::forward<Args>(args)...);
+        pointer currentPtr = (_data + static_cast<size_type>(_currentEnd++));
+        allocator_trait::construct(_allocator, currentPtr, std::forward<Args>(args)...);
 
         if (_numberOfElements == Capacity)
         {
@@ -59,7 +59,7 @@ class CircularBuffer
             ++_numberOfElements;
         }
 
-        return *_data;
+        return *currentPtr;
     }
 
     constexpr size_type capacity() const { return Capacity; }
