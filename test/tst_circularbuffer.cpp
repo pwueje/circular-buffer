@@ -27,6 +27,16 @@ TEST_F(CircularBufferTest, TestConstruction)
     EXPECT_TRUE(uut.empty());
 }
 
+TEST_F(CircularBufferTest, TestConstructionWithValues)
+{
+    CircularBuffer<int, BUFFER_SIZE> uut {0, 1, 2};
+
+    EXPECT_EQ(uut.max_size(), BUFFER_SIZE);
+    EXPECT_EQ(uut.capacity(), BUFFER_SIZE);
+    EXPECT_EQ(uut.size(), 3);
+    EXPECT_FALSE(uut.empty());
+}
+
 TEST_F(CircularBufferTest, TestEmplaceBackOnce)
 {
     constexpr int value = 5;
@@ -115,7 +125,6 @@ TEST_F(CircularBufferTest, TestDataAccess)
 
     validate(uut);
 }
-
 
 TEST_F(CircularBufferTest, TestDataAccessConst)
 {

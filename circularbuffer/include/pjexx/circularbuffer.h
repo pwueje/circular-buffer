@@ -36,6 +36,15 @@ class CircularBuffer
 
     constexpr CircularBuffer() : _data {allocator_trait::allocate(_allocator, Capacity)} {}
 
+    constexpr explicit CircularBuffer(std::initializer_list<value_type> values, const Allocator& allocator = Allocator())
+        : _allocator(allocator), _data {allocator_trait::allocate(_allocator, Capacity)}
+    {
+        for (auto value : values)
+        {
+            push_back(value);
+        }
+    }
+
     constexpr ~CircularBuffer() noexcept { allocator_trait::deallocate(_allocator, _data, Capacity); }
 
     constexpr reference operator[](size_type pos) { return *(_data + static_cast<size_type>(_currentStart + pos)); }
