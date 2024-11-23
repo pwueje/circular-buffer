@@ -37,6 +37,8 @@ class CircularBufferIterator
     using reference       = TypeModifier<value_type>&;
     using pointer         = TypeModifier<value_type>*;
 
+    constexpr CircularBufferIterator() = default;
+
     constexpr CircularBufferIterator(pointer ptr, pos_type position, size_type numberOfElements)
         : _ptr {ptr}, _currentPosition {position}, _numberOfElements {numberOfElements}, _increments {0}
     {
@@ -48,6 +50,7 @@ class CircularBufferIterator
     }
 
     constexpr reference operator*() { return *effectivePointer(); }
+    constexpr reference operator*() const { return *effectivePointer(); }
     constexpr pointer operator->() { return effectivePointer(); }
 
     constexpr self_type operator++(int)
@@ -73,7 +76,7 @@ class CircularBufferIterator
   private:
     pointer _ptr;
     pos_type _currentPosition;
-    const size_type _numberOfElements;
+    size_type _numberOfElements;
     size_type _increments;
 
     constexpr pointer effectivePointer() const
@@ -88,6 +91,8 @@ class CircularBufferIterator
         }
     }
 };
+
+static_assert(std::forward_iterator<CircularBufferIterator<int, 5>>);
 }  // namespace pjexx::circularbuffer::detail
 
 #endif
